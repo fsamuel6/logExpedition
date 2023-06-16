@@ -1,0 +1,6 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-16 15:32:17,NULL,NULL,connectedRoaming,lte,NULL,-107,NULL,NULL,-107,-12,NULL,NULL,NULL,NULL
+2023-06-16 15:32:20,NULL,NULL,connectedRoaming,lte,NULL,-107,NULL,NULL,-107,-12,NULL,NULL,NULL,NULL
+2023-06-16 15:32:23,NULL,NULL,connectedRoaming,lte,NULL,-107,NULL,NULL,-107,-12,NULL,NULL,NULL,NULL
+
+['mLte=CellSignalStrengthLte:', 'rssi=-107', 'rsrp=-106', 'rsrq=-11', 'rssnr=5', 'cqiTableIndex=2147483647', 'cqi=11', 'ta=2147483647', 'level=3', 'parametersUseForLevel=0']

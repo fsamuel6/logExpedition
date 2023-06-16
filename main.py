@@ -32,59 +32,95 @@ def setUp():
 ## Main method ##
 def main():
     # Open file we created in write mode
+    global connection_state, technology
     f = open(setUp(), "a");
     writer = csv.writer(f)
 
+    i=0 #For testing
+    #while True:
     while True:
-        connection_status = subprocess.check_output(["adb", "shell", "dumpsys", "telephony.registry"]).decode("utf-8")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        apn1 = "null"
-        apn2 = "null"
-        connection_state = "null"
-        technology = "null"
-        raw_rssi = "null"
-        rssi = "null"
-        ber = "null"
-        rscp = "null"
-        rsrp = "null"
-        rsrq = "null"
-        mcc = "null"
-        mnc = "null"
-        network_provider = "null"
-        operator = "null"
 
-        if "nrState=CONNECTED" in connection_status:
-            # print(f"{timestamp}: Phone connected to 5G")
-            connection_state = "connectedRoaming"
-            technology = "nr"
+        tech_index = 0 # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
+        apn1 = "NULL"
+        apn2 = "NULL"
+        raw_rssi = "NULL"
+        rssi = "NULL"
+        ber = "NULL"
+        rscp = "NULL"
+        rsrp = "NULL"
+        rsrq = "NULL"
+        mcc = "NULL"
+        mnc = "NULL"
+        network_provider = "NULL"
+        operator = "NULL"
 
-        elif "mDataConnectionState=2" in connection_status:
-            # print(f"{timestamp}: Phone connected to 4G")
+        ## Connection state and technology
+        connection_status = subprocess.check_output(["adb", "shell", "dumpsys", "telephony.registry"]).decode("utf-8")
+        #print(connection_status)
+        # Connection to 4G
+        if "mDataConnectionState=2" in connection_status: #eller: mDataConnectionType=13"
+        #if "mDataConnectionType=13" in connection_status:  # eller: mDataConnectionType=13"
             connection_state = "connectedRoaming"
             technology = "lte"
+            tech_index = 4
+        # Connection to 3G
+        elif "mVoiceNetworkType=3" in connection_status:
+            connection_state = "connectedRoaming"
+            technology = "wcdma"
+            tech_index = 2
+        # Connection to 2G
+        elif "mVoiceNetworkType=2" in connection_status:
+            connection_state = "connectedRoaming"
+            technology = "gsm"
+            tech_index = 1
+        # Connection to 5G
+        elif "nrState=CONNECTED" in connection_status:
+            connection_state = "connectedRoaming"
+            technology = "nr"
+            tech_index = 5
 
+        # No connection
         elif "mDataConnectionState=0" in connection_status:
             # print(f"{timestamp}: Phone disconnected from 4G or 5G")
             connection_state = "Not Connected"
             technology = "none"
+            tech_index = 0
+
+        # Get rssi, rsrp and rsrq parameters depending on technology
+
+        # tech_index = 4 # For testing: 1 is 2G, 2 is 3G. 4 is 4G, 5 is 5G
+        print("tech_index: " + tech_index.__str__())
+
+        if tech_index != 0: # if index is 0 then there is no connection
+            output = subprocess.check_output(
+                ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
+
+            print(output)
+            signal_strength = output.split(',')[tech_index].split(" ") #Splitting ouput to get valuable information
+            print(signal_strength)
+            rssi = signal_strength[1].replace("rssi=", "")
+            rsrp = signal_strength[2].replace("rsrp=", "")
+            rsrq = signal_strength[3].replace("rsrq=", "")
+
+        # Loop through strings and find right values
 
         # write data to file
-        row = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc, mnc,
+        input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc, mnc,
                network_provider, operator]
 
-        print(row)
-        writer.writerow(row)
+        #print(input_line)
+        writer.writerow(input_line)
 
         # Vi kan behöva räkna bort hur lång tid scriptet tar att köra, annars kommer tiderna förskjutas. Men
         # det gör det i Serdars script också.
         time.sleep(3)  # for testing
         # time.sleep(10) # Ska logga var 10e sekund
 
-    # Addera så scriptet inte slutar på error
-    # filen ska stängas
-    # f.close()
-
-
+       # i+=1 # for testing
 ## Run script ##
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Script interrupted")

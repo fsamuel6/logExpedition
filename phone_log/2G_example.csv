@@ -1,0 +1,6 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-16 15:32:42,NULL,NULL,connectedRoaming,lte,NULL,-67,NULL,NULL,ber=2147483647,mTa=0,NULL,NULL,NULL,NULL
+2023-06-16 15:32:45,NULL,NULL,connectedRoaming,lte,NULL,-67,NULL,NULL,ber=2147483647,mTa=0,NULL,NULL,NULL,NULL
+2023-06-16 15:32:48,NULL,NULL,connectedRoaming,lte,NULL,-67,NULL,NULL,ber=2147483647,mTa=0,NULL,NULL,NULL,NULL
+
+'mGsm=CellSignalStrengthGsm:', 'rssi=-67', 'ber=2147483647', 'mTa=0', 'mLevel=4'
