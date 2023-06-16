@@ -28,3 +28,8 @@
 2023-06-15 16:26:36: Phone connected to 4G
 2023-06-15 16:26:37: Phone connected to 4G
 2023-06-15 16:26:38: Phone connected to 4G
+2023-06-16 09:59:57: Phone connected to 4G
+2023-06-16 10:00:07: Phone connected to 4G
+2023-06-16 10:00:17: Phone connected to 4G
+2023-06-16 10:09:09: Phone connected to 4G
+2023-06-16 10:09:19: Phone connected to 4G
