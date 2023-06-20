@@ -10,7 +10,7 @@ import csv
 def get_network_type():
     result = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'], capture_output=True)
     output = result.stdout.decode().strip()
-    print(output)
+    print(result)
     if 'lte' in output.lower():
         return '4G'
     elif '3g' in output.lower():
