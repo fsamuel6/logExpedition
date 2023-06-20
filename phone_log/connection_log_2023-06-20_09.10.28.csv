@@ -1,0 +1,17 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-20 09:10:28,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:10:31,0,0,connectedRoaming,lte,0,-103,0,0,-103,-8,-,-,-,-
+2023-06-20 09:10:34,0,0,connectedRoaming,lte,0,-103,0,0,-103,-8,-,-,-,-
+2023-06-20 09:10:38,0,0,connectedRoaming,lte,0,-103,0,0,-103,-9,-,-,-,-
+2023-06-20 09:10:41,0,0,connectedRoaming,lte,0,-107,0,0,-106,-10,-,-,-,-
+2023-06-20 09:10:44,0,0,connectedRoaming,lte,0,-109,0,0,-108,-13,-,-,-,-
+2023-06-20 09:10:47,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:10:51,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:10:54,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:10:57,0,0,connectedRoaming,lte,0,-107,0,0,-106,-12,-,-,-,-
+2023-06-20 09:11:00,0,0,connectedRoaming,lte,0,-105,0,0,-104,-9,-,-,-,-
+2023-06-20 09:11:04,0,0,connectedRoaming,lte,0,-107,0,0,-107,-13,-,-,-,-
+2023-06-20 09:11:07,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:11:10,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:11:13,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-
+2023-06-20 09:11:16,0,0,Not Connected,none,0,0,0,0,0,0,-,-,-,-

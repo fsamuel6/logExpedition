@@ -6,6 +6,22 @@ import time
 import os
 import csv
 
+
+def get_network_type():
+    result = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'], capture_output=True)
+    output = result.stdout.decode().strip()
+    print(output)
+    if 'lte' in output.lower():
+        return '4G'
+    elif '3g' in output.lower():
+        return '3G'
+    elif '2g' in output.lower():
+        return '2G'
+    elif 'nr' in output.lower():
+        return '5G'
+    else:
+        return 'none'
+
 ## Set up a folder and a new log file for each run
 def setUp():
     # Some information for the file
@@ -39,46 +55,64 @@ def main():
     i=0 #For testing
     #while True:
     while True:
+        print("Network type: " + get_network_type())
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         tech_index = 0 # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
-        apn1 = "NULL"
-        apn2 = "NULL"
-        raw_rssi = "NULL"
-        rssi = "NULL"
-        ber = "NULL"
-        rscp = "NULL"
-        rsrp = "NULL"
-        rsrq = "NULL"
-        mcc = "NULL"
-        mnc = "NULL"
-        network_provider = "NULL"
-        operator = "NULL"
+        apn1 = "0"
+        apn2 = "0"
+        raw_rssi = "0"
+        rssi = "0"
+        ber = "0"
+        rscp = "0"
+        rsrp = "0"
+        rsrq = "0"
+        mcc = "-"
+        mnc = "-"
+        network_provider = "-"
+        operator = "-"
 
         ## Connection state and technology
         connection_status = subprocess.check_output(["adb", "shell", "dumpsys", "telephony.registry"]).decode("utf-8")
         #print(connection_status)
+        output = subprocess.check_output(
+            ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
+
         # Connection to 4G
         if "mDataConnectionState=2" in connection_status: #eller: mDataConnectionType=13"
         #if "mDataConnectionType=13" in connection_status:  # eller: mDataConnectionType=13"
             connection_state = "connectedRoaming"
             technology = "lte"
-            tech_index = 4
+
+            signal_strength = output.split(',')[4].split(" ")  # Splitting ouput to get valuable information
+            #print(signal_strength)
+            rssi = signal_strength[1].replace("rssi=", "")
+            rsrp = signal_strength[2].replace("rsrp=", "")
+            rsrq = signal_strength[3].replace("rsrq=", "")
+
         # Connection to 3G
         elif "mVoiceNetworkType=3" in connection_status:
             connection_state = "connectedRoaming"
             technology = "wcdma"
-            tech_index = 2
+            signal_strength = output.split(',')[2].split(" ")  # Splitting ouput to get valuable information
+            rsrp = signal_strength[3].replace("rsrp=", "")
+            ber = signal_strength[2].replace("ber=", "")
+
         # Connection to 2G
         elif "mVoiceNetworkType=2" in connection_status:
             connection_state = "connectedRoaming"
             technology = "gsm"
-            tech_index = 1
+            signal_strength = output.split(',')[1].split(" ")  # Splitting ouput to get valuable information
+            rssi = signal_strength[1].replace("rssi=", "")
+            ber = signal_strength[2].replace("ber=", "")
         # Connection to 5G
         elif "nrState=CONNECTED" in connection_status:
             connection_state = "connectedRoaming"
             technology = "nr"
-            tech_index = 5
+            signal_strength = output.split(',')[5].split(" ")  # Splitting ouput to get valuable information
+
+            #Nedan gissar jag att dessa finns
+            rssi = signal_strength[1].replace("rssi=", "")
 
         # No connection
         elif "mDataConnectionState=0" in connection_status:
@@ -87,29 +121,9 @@ def main():
             technology = "none"
             tech_index = 0
 
-        # Get rssi, rsrp and rsrq parameters depending on technology
-
-        # tech_index = 4 # For testing: 1 is 2G, 2 is 3G. 4 is 4G, 5 is 5G
-        print("tech_index: " + tech_index.__str__())
-
-        if tech_index != 0: # if index is 0 then there is no connection
-            output = subprocess.check_output(
-                ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
-
-            print(output)
-            signal_strength = output.split(',')[tech_index].split(" ") #Splitting ouput to get valuable information
-            print(signal_strength)
-            rssi = signal_strength[1].replace("rssi=", "")
-            rsrp = signal_strength[2].replace("rsrp=", "")
-            rsrq = signal_strength[3].replace("rsrq=", "")
-
-        # Loop through strings and find right values
-
         # write data to file
         input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc, mnc,
                network_provider, operator]
-
-        #print(input_line)
         writer.writerow(input_line)
 
         # Vi kan behöva räkna bort hur lång tid scriptet tar att köra, annars kommer tiderna förskjutas. Men
