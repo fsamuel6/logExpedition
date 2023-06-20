@@ -83,7 +83,7 @@ def main():
         #if "mDataConnectionType=13" in connection_status:  # eller: mDataConnectionType=13"
             connection_state = "connectedRoaming"
             technology = "lte"
-
+            output = result.stdout.decode().strip()
             signal_strength = output.split(',')[4].split(" ")  # Splitting ouput to get valuable information
             #print(signal_strength)
             rssi = signal_strength[1].replace("rssi=", "")

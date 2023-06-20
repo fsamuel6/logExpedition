@@ -9,15 +9,17 @@ import csv
 
 def get_network_type():
     result = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'], capture_output=True)
-    output = result.stdout.decode().strip()
-    print(result)
-    if 'lte' in output.lower():
+    output = result.stdout.decode().strip().lower()
+
+
+
+    if 'lte' in output:
         return '4G'
-    elif '3g' in output.lower():
-        return '3G'
-    elif '2g' in output.lower():
+    elif "edge" in output:
         return '2G'
-    elif 'nr' in output.lower():
+    elif "hspap" in output or 'umts' in output or 'wcdma' in output:
+        return '3G'
+    elif 'nr' in output:
         return '5G'
     else:
         return 'none'
@@ -55,8 +57,7 @@ def main():
     i=0 #For testing
     #while True:
     while True:
-        network_type = get_network_type()
-        print("Network type: " + network_type)
+
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         tech_index = 0 # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
@@ -78,15 +79,17 @@ def main():
         #print(connection_status)
         output = subprocess.check_output(
             ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
+        #print(output)
 
+        network_type = get_network_type()
+        print("Network type: " + network_type)
         # Connection to 4G
-        if network_type == "4G": #eller: mDataConnectionType=13"
-        #if "mDataConnectionType=13" in connection_status:  # eller: mDataConnectionType=13"
+        if network_type == "4G":
             connection_state = "connectedRoaming"
             technology = "lte"
 
             signal_strength = output.split(',')[4].split(" ")  # Splitting ouput to get valuable information
-            #print(signal_strength)
+
             rssi = signal_strength[1].replace("rssi=", "")
             rsrp = signal_strength[2].replace("rsrp=", "")
             rsrq = signal_strength[3].replace("rsrq=", "")
