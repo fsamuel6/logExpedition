@@ -11,8 +11,6 @@ def get_network_type():
     result = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'], capture_output=True)
     output = result.stdout.decode().strip().lower()
 
-
-
     if 'lte' in output:
         return '4G'
     elif "edge" in output:
@@ -23,6 +21,7 @@ def get_network_type():
         return '5G'
     else:
         return 'none'
+
 
 ## Set up a folder and a new log file for each run
 def setUp():
@@ -47,20 +46,21 @@ def setUp():
 
     return file_path
 
+
 ## Main method ##
 def main():
-    # Open file we created in write mode
+
     global connection_state, technology
-    f = open(setUp(), "a");
+
+    # Open file we created in write mode
+    f = open(setUp(), "a")
     writer = csv.writer(f)
 
-    i=0 #For testing
-    #while True:
     while True:
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        tech_index = 0 # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
+        tech_index = 0  # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
         apn1 = "0"
         apn2 = "0"
         raw_rssi = "0"
@@ -75,11 +75,9 @@ def main():
         operator = "-"
 
         ## Connection state and technology
-        connection_status = subprocess.check_output(["adb", "shell", "dumpsys", "telephony.registry"]).decode("utf-8")
-        #print(connection_status)
         output = subprocess.check_output(
             ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
-        #print(output)
+        # print(output)
 
         network_type = get_network_type()
         print("Network type: " + network_type)
@@ -115,7 +113,7 @@ def main():
             technology = "nr"
             signal_strength = output.split(',')[5].split(" ")  # Splitting ouput to get valuable information
 
-            #Nedan gissar jag att dessa finns
+            # Nedan gissar jag att dessa finns
             rssi = signal_strength[1].replace("rssi=", "")
 
         # No connection
@@ -126,8 +124,9 @@ def main():
             tech_index = 0
 
         # write data to file
-        input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc, mnc,
-               network_provider, operator]
+        input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc,
+                      mnc,
+                      network_provider, operator]
         writer.writerow(input_line)
 
         # Vi kan behöva räkna bort hur lång tid scriptet tar att köra, annars kommer tiderna förskjutas. Men
@@ -135,7 +134,9 @@ def main():
         time.sleep(3)  # for testing
         # time.sleep(10) # Ska logga var 10e sekund
 
-       # i+=1 # for testing
+    # i+=1 # for testing
+
+
 ## Run script ##
 if __name__ == "__main__":
     try:
