@@ -15,7 +15,7 @@ def get_network_type():
         return '4G'
     elif "edge" in output:
         return '2G'
-    elif "hspap" in output or 'umts' in output or 'wcdma' in output:
+    elif "hspap" in output or 'umts' in output or 'wcdma' in output or 'hsdpa' in output or 'hspa' in output or 'hsupa' in output:
         return '3G'
     elif 'nr' in output:
         return '5G'
@@ -109,7 +109,7 @@ def main():
                 connection_state = "connectedRoaming"
                 technology = "wcdma"
                 signal_strength = output.split(',')[2].split(" ")  # Splitting ouput to get valuable information
-                rsrp = signal_strength[3].replace("rsrp=", "")
+                rscp = signal_strength[3].replace("rscp=", "")
                 ber = signal_strength[2].replace("ber=", "")
 
             # Connection to 2G

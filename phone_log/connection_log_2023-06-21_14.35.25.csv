@@ -1,0 +1,15 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-21 14:35:25,0,0,connectedRoaming,wcdma,0,0,99,-58,0,0,240,08,-,-
+2023-06-21 14:35:35,0,0,connectedRoaming,wcdma,0,0,99,-56,0,0,240,08,-,-
+2023-06-21 14:35:46,0,0,connectedRoaming,wcdma,0,0,99,-56,0,0,240,08,-,-
+2023-06-21 14:35:56,0,0,connectedRoaming,wcdma,0,0,99,-64,0,0,240,08,-,-
+2023-06-21 14:36:06,0,0,connectedRoaming,wcdma,0,0,99,-60,0,0,240,08,-,-
+2023-06-21 14:36:16,0,0,connectedRoaming,wcdma,0,0,99,-58,0,0,240,08,-,-
+2023-06-21 14:36:27,0,0,connectedRoaming,wcdma,0,0,99,-58,0,0,240,08,-,-
+2023-06-21 14:36:37,0,0,connectedRoaming,wcdma,0,0,99,-60,0,0,240,08,-,-
+2023-06-21 14:36:47,0,0,connectedRoaming,wcdma,0,0,99,-56,0,0,240,08,-,-
+2023-06-21 14:36:57,0,0,connectedRoaming,wcdma,0,0,99,-57,0,0,240,08,-,-
+2023-06-21 14:37:07,0,0,connectedRoaming,wcdma,0,0,99,-57,0,0,240,08,-,-
+2023-06-21 14:37:18,0,0,connectedRoaming,wcdma,0,0,99,-55,0,0,240,08,-,-
+2023-06-21 14:37:28,0,0,connectedRoaming,wcdma,0,0,99,-57,0,0,240,08,-,-
+2023-06-21 14:37:38,0,0,connectedRoaming,wcdma,0,0,99,-56,0,0,240,08,-,-

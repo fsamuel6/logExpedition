@@ -1,0 +1,3 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-21 14:31:57,0,0,Not Connected,none,0,0,0,0,0,0,240,08,-,-
+2023-06-21 14:32:07,0,0,Not Connected,none,0,0,0,0,0,0,240,08,-,-

@@ -1,0 +1,4 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-21 14:38:06,0,0,connectedRoaming,wcdma,0,0,99,-50,0,0,240,08,-,-
+2023-06-21 14:38:16,0,0,connectedRoaming,wcdma,0,0,99,-52,0,0,240,08,-,-
+2023-06-21 14:38:26,0,0,connectedRoaming,wcdma,0,0,99,-52,0,0,240,08,-,-
