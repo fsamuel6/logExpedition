@@ -70,6 +70,7 @@ def main():
     while True:
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        start_time = time.time()
 
         tech_index = 0  # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
         apn1 = "0"
@@ -149,9 +150,8 @@ def main():
         print(input_line)
         print()
 
-        # Vi kan behöva räkna bort hur lång tid scriptet tar att köra, annars kommer tiderna förskjutas. Men
-        # det gör det i Serdars script också.
-        time.sleep(10)  # for testing
+        dt = time.time() - start_time
+        time.sleep(10 - dt)  # for testing
         # time.sleep(10) # Ska logga var 10e sekund
 
     # i+=1 # for testing
