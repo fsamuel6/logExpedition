@@ -1,0 +1,7 @@
+timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator
+2023-06-21 09:48:32,0,0,connectedRoaming,lte,0,-103,0,0,-103,-10,240,08,-,-
+2023-06-21 09:48:35,0,0,connectedRoaming,lte,0,-103,0,0,-103,-10,240,08,-,-
+2023-06-21 09:48:38,0,0,connectedRoaming,lte,0,-103,0,0,-103,-10,240,08,-,-
+2023-06-21 09:48:42,0,0,connectedRoaming,lte,0,-103,0,0,-103,-10,240,08,-,-
+2023-06-21 09:48:45,0,0,connectedRoaming,lte,0,-103,0,0,-103,-10,240,08,-,-
+2023-06-21 09:48:48,0,0,connectedRoaming,lte,0,-103,0,0,-103,-10,240,08,-,-
