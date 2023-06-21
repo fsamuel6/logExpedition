@@ -10,7 +10,7 @@ import csv
 def get_network_type():
     result = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'], capture_output=True)
     output = result.stdout.decode().strip().lower()
-
+    print("Network connection: " + output)
     if 'lte' in output:
         return '4G'
     elif "edge" in output:
@@ -21,6 +21,18 @@ def get_network_type():
         return '5G'
     else:
         return 'none'
+
+def get_mcc_mnc():
+
+    # Execute ADB command to get the MCC and MNC
+    output = subprocess.check_output(['adb', 'shell', 'getprop', 'gsm.operator.numeric']).decode().strip()
+    output = output.replace(",", "")
+
+    # Split the output into MCC and MNC
+    mcc = output[:3]
+    mnc = output[3:]
+
+    return mcc, mnc
 
 
 ## Set up a folder and a new log file for each run
@@ -49,7 +61,6 @@ def setUp():
 
 ## Main method ##
 def main():
-
     global connection_state, technology
 
     # Open file we created in write mode
@@ -59,6 +70,7 @@ def main():
     while True:
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        start_time = time.time()
 
         tech_index = 0  # Gives index of information about 2G, 3G, 4G or 5G when parsing some input
         apn1 = "0"
@@ -81,57 +93,65 @@ def main():
 
         network_type = get_network_type()
         print("Network type: " + network_type)
-        # Connection to 4G
-        if network_type == "4G":
-            connection_state = "connectedRoaming"
-            technology = "lte"
+        try:
+            # Connection to 4G
+            if network_type == "4G":
+                connection_state = "connectedRoaming"
+                technology = "lte"
 
-            signal_strength = output.split(',')[4].split(" ")  # Splitting ouput to get valuable information
+                signal_strength = output.split(',')[4].split(" ")  # Splitting ouput to get valuable information
 
-            rssi = signal_strength[1].replace("rssi=", "")
-            rsrp = signal_strength[2].replace("rsrp=", "")
-            rsrq = signal_strength[3].replace("rsrq=", "")
+                rssi = signal_strength[1].replace("rssi=", "")
+                rsrp = signal_strength[2].replace("rsrp=", "")
+                rsrq = signal_strength[3].replace("rsrq=", "")
 
-        # Connection to 3G
-        elif network_type == "3G":
-            connection_state = "connectedRoaming"
-            technology = "wcdma"
-            signal_strength = output.split(',')[2].split(" ")  # Splitting ouput to get valuable information
-            rsrp = signal_strength[3].replace("rsrp=", "")
-            ber = signal_strength[2].replace("ber=", "")
+            # Connection to 3G
+            elif network_type == "3G":
+                connection_state = "connectedRoaming"
+                technology = "wcdma"
+                signal_strength = output.split(',')[2].split(" ")  # Splitting ouput to get valuable information
+                rsrp = signal_strength[3].replace("rsrp=", "")
+                ber = signal_strength[2].replace("ber=", "")
 
-        # Connection to 2G
-        elif network_type == "2G":
-            connection_state = "connectedRoaming"
-            technology = "gsm"
-            signal_strength = output.split(',')[1].split(" ")  # Splitting ouput to get valuable information
-            rssi = signal_strength[1].replace("rssi=", "")
-            ber = signal_strength[2].replace("ber=", "")
-        # Connection to 5G
-        elif network_type == "5G":
-            connection_state = "connectedRoaming"
-            technology = "nr"
-            signal_strength = output.split(',')[5].split(" ")  # Splitting ouput to get valuable information
+            # Connection to 2G
+            elif network_type == "2G":
+                connection_state = "connectedRoaming"
+                technology = "gsm"
+                signal_strength = output.split(',')[1].split(" ")  # Splitting ouput to get valuable information
+                rssi = signal_strength[1].replace("rssi=", "")
+                ber = signal_strength[2].replace("ber=", "")
 
-            # Nedan gissar jag att dessa finns
-            rssi = signal_strength[1].replace("rssi=", "")
+            # Connection to 5G
+            elif network_type == "5G":
+                connection_state = "connectedRoaming"
+                technology = "nr"
+                signal_strength = output.split(',')[5].split(" ")  # Splitting ouput to get valuable information
 
-        # No connection
-        elif network_type == "none":
-            # print(f"{timestamp}: Phone disconnected from 4G or 5G")
-            connection_state = "Not Connected"
-            technology = "none"
-            tech_index = 0
+                # Nedan gissar jag att dessa finns
+                rssi = signal_strength[1].replace("rssi=", "")
+
+            # No connection
+            elif network_type == "none":
+                # print(f"{timestamp}: Phone disconnected from 4G or 5G")
+                connection_state = "Not Connected"
+                technology = "none"
+        except IndexError:
+            print("IndexError: Could not read out network info at: " + timestamp)
+
+
+        # Country and network code
+        mcc, mnc = get_mcc_mnc()
 
         # write data to file
         input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc,
                       mnc,
                       network_provider, operator]
         writer.writerow(input_line)
+        print(input_line)
+        print()
 
-        # Vi kan behöva räkna bort hur lång tid scriptet tar att köra, annars kommer tiderna förskjutas. Men
-        # det gör det i Serdars script också.
-        time.sleep(3)  # for testing
+        dt = time.time() - start_time
+        time.sleep(10 - dt)  # for testing
         # time.sleep(10) # Ska logga var 10e sekund
 
     # i+=1 # for testing
