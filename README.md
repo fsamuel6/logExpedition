@@ -2,7 +2,7 @@
 
 Expedition log instructions
 
-1. Connect the Samsung phone to the computer through USB
+1. Connect the Samsung phone to the computer through USB/USB-c
 2. On the phone:
    a. Dial *#8080# and choose an alternative that contains "DM" and "ADB"
    b. Swipe down on the top of the phone, choose the USB settinga and choose "Transferring files" option
