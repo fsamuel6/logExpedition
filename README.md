@@ -13,4 +13,4 @@
    - The results will be saved in a folder called phoneLog in the same directory as the script. The result will be saved as .csv files, one for every time the script is executed.
   
 ## Contact Information ##
-For questions, please contact fforsdik@volvocars.com or bohman@volvocars.com
+For questions, please contact fsamue6@volvocars.com or bohman@volvocars.com
