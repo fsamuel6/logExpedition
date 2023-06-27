@@ -5,13 +5,14 @@ from datetime import datetime
 import time
 import os
 import csv
+import geocoder
 
 ## Set up a folder and a new log file for each run
 def setUp():
     # Some information for the file
     time = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
     column_heads = ["timestamp", "apn1", "apn2", "connection_state", "technology", "raw_rssi", "rssi", "ber", "rscp",
-                    "rsrp", "rsrq", "mcc", "mnc", "network_provider", "operator", ]
+                    "rsrp", "rsrq", "mcc", "mnc", "network_provider", "operator", "coordinates"]
 
     # make folder if not exists
     current_working_directory = os.getcwd() + "/phone_log"
@@ -28,6 +29,7 @@ def setUp():
     file.close()
 
     return file_path
+
 
 
 def get_mcc_mnc():
@@ -79,7 +81,7 @@ def get_signal_data():
         ber = signal_strength[2].replace("ber=", "")
 
     # Connection to 2G
-    if 'edge' in network_type:
+    elif 'edge' in network_type:
         connection_state = "connectedRoaming"
         technology = 'edge'
         signal_strength = signal_data.split(',')[1].split(" ")  # Splitting ouput to get valuable information
@@ -87,7 +89,7 @@ def get_signal_data():
         ber = signal_strength[2].replace("ber=", "")
 
     # Connection to 5G
-    if 'nr' in network_type:
+    elif 'nr' in network_type:
         connection_state = "connectedRoaming"
         technology = 'nr'
         signal_strength = signal_data.split(',')[5].split(" ")  # Splitting ouput to get valuable information
@@ -129,9 +131,15 @@ def main():
             # Country and network code
             mcc, mnc = get_mcc_mnc()
 
+            # Coordinates
+            g = geocoder.ip('me')
+
+            coordinates = g.latlng
+            print(coordinates)
+
             # write data to file
             input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc,
-                          mnc, network_provider, operator]
+                          mnc, network_provider, operator, str(coordinates[0]) + "," + str(coordinates[1])]
             writer.writerow(input_line)
 
             print(input_line)
@@ -141,6 +149,7 @@ def main():
             time.sleep(10 - dt)
         except IndexError:
             print("IndexError: Could not read out network info at: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
 
 
 ## Run script ##
