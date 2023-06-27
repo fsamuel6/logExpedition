@@ -6,6 +6,8 @@ import time
 import os
 import csv
 import geocoder
+import gps
+
 
 ## Set up a folder and a new log file for each run
 def setUp():
@@ -29,8 +31,6 @@ def setUp():
     file.close()
 
     return file_path
-
-
 
 def get_mcc_mnc():
 
@@ -103,6 +103,8 @@ def get_signal_data():
 
         technology = "none"
 
+
+
     return connection_state, technology, rssi, rsrp, rsrq, rscp, ber
 
 
@@ -135,11 +137,12 @@ def main():
             g = geocoder.ip('me')
 
             coordinates = g.latlng
-            print(coordinates)
+            #print(coordinates)
+
 
             # write data to file
             input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc,
-                          mnc, network_provider, operator, str(coordinates[0]) + "," + str(coordinates[1])]
+                        mnc, network_provider, operator, str(coordinates[0]) + "," + str(coordinates[1])]
             writer.writerow(input_line)
 
             print(input_line)
