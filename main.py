@@ -32,6 +32,22 @@ def setUp():
 
     return file_path
 
+def get_gps_location():
+    adb_command = "adb shell dumpsys location"
+    output = subprocess.check_output(adb_command, shell=True, universal_newlines=True)
+    # print(output)
+    # Find latitude and longitude coordinates in the output
+    latitude = None
+    longitude = None
+
+    # Split the output by lines and search for latitude and longitude
+    for line in output.split('\n'):
+        # print(line)
+        if 'last location' in line:
+            pos = line.split(" ")[8]
+            print(pos)
+            return pos
+
 def get_mcc_mnc():
 
     # Execute ADB command to get the MCC and MNC
@@ -133,16 +149,12 @@ def main():
             # Country and network code
             mcc, mnc = get_mcc_mnc()
 
-            # Coordinates
-            g = geocoder.ip('me')
+            #GPS position
+            pos = get_gps_location()
 
-            coordinates = g.latlng
-            #print(coordinates)
-
-
-            # write data to file
+            #Write to csv file
             input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc,
-                        mnc, network_provider, operator, str(coordinates[0]) + "," + str(coordinates[1])]
+                        mnc, network_provider, operator, pos]
             writer.writerow(input_line)
 
             print(input_line)
