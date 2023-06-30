@@ -1,18 +1,24 @@
 # logExpedition #
 
-## Expedition log instructions ##
+## SetUp phone ##
 
-1. Connect the Samsung phone to the computer through USB/USB-c
-2. On the phone:
-   1. Dial *#8080# and choose an alternative that contains "DM" and "ADB"
-   2. Swipe down on the top of the phone, click on USB settings and choose "Transferring files" option
-   3. Go to Settings > Developer options > Enable "USB debugging".
-      - If you can not go to developer options: Go to Setttings > About phone > Software information > Press "Build number" 7 times. Now developer options will be activated.
-4. If you want to check the connection, run the command "adb devices" on your PC
-5. In terminal, install geocoder:
-   - pip install geocoder
-7. Run main.py from terminal with the command "python3 main.py" or run it from an editor
-   - The results will be saved in a folder called phoneLog in the same directory as the script. The result will be saved as .csv files, one for every time the script is executed.
-  
+1. Clone github repo
+2. Connect the Samsung phone to the computer through USB/USB-c
+3. On the phone:
+   1. Swipe down on the top of the phone, click on "USB charging) and choose "Transferring files" option
+   2. Go to Settings > Developer options > Enable "USB debugging" (or search for developer options).
+      1. If you can not go to developer options: Go to Settings > About phone > Press "Build number" 5 times. Now developer options will be activated and you can do the previous task.
+   3. (Only on Samsung) Dial *#8080# and choose an alternative that contains "DM" and "ADB"
+4. On German SIM:
+   1. Activate Roaming
+   2. To allow GPS tracking: Go to Google maps, try navigating to anyplace and choose starting point as "Your location" and allow Google maps to use your location.
+5. If you want to check the connection, run the command "adb devices" on your PC
+
+## Running the script ##
+
+Run main.py from terminal with the command "python3 main.py" or run it from an editor while leaving the USB plugged in.
+
+The results will be saved in a folder called phoneLog in the same directory as the script. The result will be saved as .csv files, one for every time the script is executed.
+
 ## Contact Information ##
 For questions, please contact fsamuel6@volvocars.com or bohman@volvocars.com
