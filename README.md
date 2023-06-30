@@ -1,6 +1,6 @@
 # logExpedition #
 
-## Expedition log instructions ##
+## SetUp phone ##
 
 1. Clone github repo
 2. Connect the Samsung phone to the computer through USB/USB-c
