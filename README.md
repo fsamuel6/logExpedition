@@ -14,7 +14,6 @@
    2. To allow GPS tracking: Go to Google maps, try navigating to anyplace and choose starting point as "Your location" and allow Google maps to use your location.
 5. If you want to check the connection, run the command "adb devices" on your PC
 
-
 ## Running the script ##
 
 Run main.py from terminal with the command "python3 main.py" or run it from an editor while leaving the USB plugged in.
