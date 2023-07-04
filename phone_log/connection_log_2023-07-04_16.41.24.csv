@@ -1,3 +1,0 @@
-timestamp,apn1,apn2,connection_state,technology,raw_rssi,rssi,ber,rscp,rsrp,rsrq,mcc,mnc,network_provider,operator,coordinates
-2023-07-04 16:41:24,0,0,connectedRoaming,lte,0,-75,0,0,-75,-4,240,02,,,"55.717348,13.216038"
-2023-07-04 16:41:34,0,0,connectedRoaming,lte,0,-75,0,0,-75,-4,240,02,,,"55.717348,13.216038"
