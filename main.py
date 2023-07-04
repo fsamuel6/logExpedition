@@ -1,4 +1,6 @@
-# This is a Python script for logging the connection status of a Samsung phone
+"""
+This is a Python script for logging the connection status of a Samsung phone
+"""
 
 import subprocess
 from datetime import datetime
@@ -7,10 +9,10 @@ import os
 import csv
 
 
-## Set up a folder and a new log file for each run
 def setUp():
+    """ Set up a folder and a new log file for each run"""
     # Some information for the file
-    time = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
     column_heads = ["timestamp", "apn1", "apn2", "connection_state", "technology", "raw_rssi", "rssi", "ber", "rscp",
                     "rsrp", "rsrq", "mcc", "mnc", "network_provider", "operator", "coordinates"]
 
@@ -20,7 +22,7 @@ def setUp():
         os.makedirs(current_working_directory)
 
     # make new file
-    file_path = current_working_directory + "/connection_log_" + time + ".csv"
+    file_path = current_working_directory + "/connection_log_" + timestamp + ".csv"
     open(file_path, "x")  # Creates file
     file = open(file_path, "a")
 
@@ -31,8 +33,9 @@ def setUp():
     return file_path
 
 
-# Find gps coordinates
 def get_gps_location():
+    """ Find gps coordinates"""
+
     adb_command = "adb shell dumpsys location"
     output = subprocess.check_output(adb_command, shell=True, universal_newlines=True)
 
@@ -43,8 +46,9 @@ def get_gps_location():
             return pos
 
 
-# Get country code and operator code
 def get_mcc_mnc():
+    """Get country code and operator code"""
+
     # Execute ADB command to get the MCC and MNC
     output = subprocess.check_output(['adb', 'shell', 'getprop', 'gsm.operator.numeric']).decode().strip()
     output = output.replace(",", "")
@@ -56,8 +60,9 @@ def get_mcc_mnc():
     return mcc, mnc
 
 
-# Get data on signal strength and network type
 def get_signal_data():
+    """ Get data on signal strength and network type"""
+
     technology = ""
     rssi = "0"
     ber = "0"
@@ -74,7 +79,8 @@ def get_signal_data():
         ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
     # print("Signal strength: " + signal_data) # For more information when testing
 
-    ## Setting different parameters based on the type of network
+    # Setting different parameters based on the type of network
+
     # Connection to 4G
     if 'lte' in network_type:
         connection_state = "connectedRoaming"
@@ -88,7 +94,8 @@ def get_signal_data():
         rsrq = signal_strength[3].replace("rsrq=", "")
 
     # Connection to 3G
-    elif "hspap" in network_type or 'umts' in network_type or 'wcdma' in network_type or 'hsdpa' in network_type or 'hspa' in network_type or 'hsupa' in network_type:
+    elif "hspap" in network_type or 'umts' in network_type or 'wcdma' in network_type \
+            or 'hsdpa' in network_type or 'hspa' in network_type or 'hsupa' in network_type:
         connection_state = "connectedRoaming"
         technology = network_type.replace(",unknown", "")
 
@@ -122,8 +129,9 @@ def get_signal_data():
     return connection_state, technology, rssi, rsrp, rsrq, rscp, ber
 
 
-## Main method ##
 def main():
+    """ Main Method """
+
     # Open file we created in write mode
     f = open(setUp(), "a")
     writer = csv.writer(f)
@@ -158,7 +166,6 @@ def main():
         time.sleep(10 - dt)
 
 
-## Run script ##
 if __name__ == "__main__":
     try:
         main()
@@ -166,7 +173,10 @@ if __name__ == "__main__":
         print("Script interrupted")
     except subprocess.CalledProcessError:
         print(
-            "\n Error: No device found \n Make sure you have: \n 1. Enabled USB debugging in Developer options \n 2. Allowed usb debugging on the screen when plugging in the usb. Remove the usb and plug in again if this pop-up doesn't show up. \n 2. Changed 'USB charging' to 'File transfer' \n \n Script interrupted.")
+            "\n Error: No device found \n Make sure you have: \n 1. Enabled USB debugging in Developer options \n 2. "
+            "Allowed usb debugging on the screen when plugging in the usb. Remove the usb and plug in again if this "
+            "pop-up doesn't show up. \n 2. Changed 'USB charging' to 'File transfer' \n \n Script interrupted.")
     except IndexError:
         print(
-            "Error: \n GPS location is not turned on. Go to Google maps, and try to navigate from 'your location' to allow GPS use. \n \n Script interrupted.")
+            "Error: \n GPS location is not turned on. Go to Google maps, and try to navigate from 'your location' to "
+            "allow GPS use. \n \n Script interrupted.")
