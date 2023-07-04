@@ -1,6 +1,10 @@
 # logExpedition #
 
-## SetUp phone ##
+## About Project ##
+
+This python scripts logs the network connection of an Android phone. It has been tested on Google Pixel 5a and the instructions are written for this phone. The instruction might differ from android to android.
+
+## SetUp Phone ##
 
 1. Clone github repo
 2. Connect the Samsung phone to the computer through USB/USB-c
