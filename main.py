@@ -6,6 +6,7 @@ import time
 import os
 import csv
 
+
 ## Set up a folder and a new log file for each run
 def setUp():
     # Some information for the file
@@ -29,6 +30,7 @@ def setUp():
 
     return file_path
 
+
 # Find gps coordinates
 def get_gps_location():
     adb_command = "adb shell dumpsys location"
@@ -36,15 +38,13 @@ def get_gps_location():
 
     # Split the output by lines and search for latitude and longitude
     for line in output.split('\n'):
-        # print(line)
         if 'last location' in line:
             pos = line.split(" ")[8]
-            #print(pos)
             return pos
+
 
 # Get country code and operator code
 def get_mcc_mnc():
-
     # Execute ADB command to get the MCC and MNC
     output = subprocess.check_output(['adb', 'shell', 'getprop', 'gsm.operator.numeric']).decode().strip()
     output = output.replace(",", "")
@@ -66,13 +66,13 @@ def get_signal_data():
     rsrq = "0"
     connection_state = "Not Connected"
 
-    network_type = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'], capture_output=True).stdout.decode().strip().lower()
-    print("Network type: " + network_type)
+    network_type = subprocess.run(['adb', 'shell', 'getprop', 'gsm.network.type'],
+                                  capture_output=True).stdout.decode().strip().lower()
+    # print("Network type: " + network_type) # For testing
 
     signal_data = subprocess.check_output(
         ['adb', 'shell', 'dumpsys', 'telephony.registry', '|', 'grep', 'mSignalStrength']).decode().strip()
-    print("Signal strength: " + signal_data)
-
+    # print("Signal strength: " + signal_data) # For more information when testing
 
     ## Setting different parameters based on the type of network
     # Connection to 4G
@@ -80,7 +80,8 @@ def get_signal_data():
         connection_state = "connectedRoaming"
         technology = 'lte'
 
-        signal_strength = signal_data.split(',')[4].split(" ")  # Splitting output to get valuable information. Magic number depends on network type
+        signal_strength = signal_data.split(',')[4].split(
+            " ")  # Splitting output to get valuable information. Magic number depends on network type
 
         rssi = signal_strength[1].replace("rssi=", "")
         rsrp = signal_strength[2].replace("rsrp=", "")
@@ -120,9 +121,9 @@ def get_signal_data():
 
     return connection_state, technology, rssi, rsrp, rsrq, rscp, ber
 
+
 ## Main method ##
 def main():
-
     # Open file we created in write mode
     f = open(setUp(), "a")
     writer = csv.writer(f)
@@ -143,18 +144,17 @@ def main():
         # Country and network code
         mcc, mnc = get_mcc_mnc()
 
-        #GPS position
+        # GPS position
         pos = get_gps_location()
 
-        #Write to csv file
+        # Write to csv file
         input_line = [timestamp, apn1, apn2, connection_state, technology, raw_rssi, rssi, ber, rscp, rsrp, rsrq, mcc,
-                    mnc, network_provider, operator, pos]
+                      mnc, network_provider, operator, pos]
         writer.writerow(input_line)
 
-        print(input_line)
-        print()
+        print(input_line, "\n")
 
-        dt = time.time() - start_time # Adjusting time sleeping so it's always exactly 10 seconds
+        dt = time.time() - start_time  # Adjusting time sleeping so it's always exactly 10 seconds
         time.sleep(10 - dt)
 
 
@@ -164,3 +164,9 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("Script interrupted")
+    except subprocess.CalledProcessError:
+        print(
+            "\n Error: No device found \n Make sure you have: \n 1. Enabled USB debugging in Developer options \n 2. Allowed usb debugging on the screen when plugging in the usb. Remove the usb and plug in again if this pop-up doesn't show up. \n 2. Changed 'USB charging' to 'File transfer' \n \n Script interrupted.")
+    except IndexError:
+        print(
+            "Error: \n GPS location is not turned on. Go to Google maps, and try to navigate from 'your location' to allow GPS use. \n \n Script interrupted.")
