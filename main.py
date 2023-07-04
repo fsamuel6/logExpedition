@@ -9,17 +9,22 @@ import os
 import csv
 
 
-def setUp():
-    """ Set up a folder and a new log file for each run"""
+def create_directory():
+    """ Set up a folder for logs"""
+    # make folder if not exists
+    current_working_directory = os.getcwd() + "/phone_log"
+    if not os.path.exists(current_working_directory):
+        os.makedirs(current_working_directory)
+
+
+def create_new_log_file():
+    """ Set up a new log file for each run"""
     # Some information for the file
     timestamp = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
     column_heads = ["timestamp", "apn1", "apn2", "connection_state", "technology", "raw_rssi", "rssi", "ber", "rscp",
                     "rsrp", "rsrq", "mcc", "mnc", "network_provider", "operator", "coordinates"]
 
-    # make folder if not exists
     current_working_directory = os.getcwd() + "/phone_log"
-    if not os.path.exists(current_working_directory):
-        os.makedirs(current_working_directory)
 
     # make new file
     file_path = current_working_directory + "/connection_log_" + timestamp + ".csv"
@@ -133,8 +138,10 @@ def main():
     """ Main Method """
 
     # Open file we created in write mode
-    f = open(setUp(), "a")
-    writer = csv.writer(f)
+    create_directory()
+    file = open(create_new_log_file(), "a")
+
+    writer = csv.writer(file)
 
     while True:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
